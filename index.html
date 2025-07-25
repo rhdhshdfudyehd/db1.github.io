@@ -765,7 +765,7 @@
                     <li><a href="#solutions">解决方案</a></li>
                     <li><a href="#contact">联系我们</a></li>
                 </ul>
-                <a href="#" class="header-cta _url">立即咨询</a>
+                <a href="#" class="header-cta _url" target="_blank">立即咨询</a>
             </nav>
         </div>
     </header>
@@ -776,10 +776,10 @@
             <div class="hero-grid">
                 <div class="hero-content fade-in-up">
                     <h1>专业数据采集<br>与定制服务</h1>
-                    <p class="hero-subtitle">专注游戏、网赚、APP、短视频、金融、直播等热门行业数据采集与定制，提供精准、高效、安全的数据解决方案。</p>
+                    <p class="hero-subtitle">专注游戏、兼职、APP、短视频、金融、直播等热门行业数据采集与定制，提供精准、高效、安全的数据解决方案。</p>
                     
                     <div class="hero-buttons">
-                        <a href="#" class="btn-primary _url">
+                        <a href="#" class="btn-primary _url" target="_blank">
                             立即咨询 
                             <span>→</span>
                         </a>
@@ -840,7 +840,7 @@
             <div class="section-header fade-in-up">
                 <span class="section-badge">核心优势</span>
                 <h2 class="section-title">行业数据采集专家</h2>
-                <p class="section-description">深耕游戏、网赚、APP、短视频、金融、直播等领域，为您提供专业的数据采集与定制服务</p>
+                <p class="section-description">深耕游戏、兼职、APP、短视频、金融、直播等领域，为您提供专业的数据采集与定制服务</p>
             </div>
 
             <div class="features-grid">
@@ -852,8 +852,8 @@
 
                 <div class="feature-card fade-in-up">
                     <div class="feature-icon">💰</div>
-                    <h3 class="feature-title">网赚项目监控</h3>
-                    <p class="feature-description">各大网赚平台数据监控，项目收益分析，用户行为追踪，为网赚从业者提供决策支持。</p>
+                    <h3 class="feature-title">兼职项目监控</h3>
+                    <p class="feature-description">各大兼职平台数据监控，项目收益分析，用户行为追踪，为兼职从业者提供决策支持。</p>
                 </div>
 
                 <div class="feature-card fade-in-up">
@@ -951,7 +951,7 @@
                             <div class="service-feature">实时金融行情</div>
                             <div class="service-feature">数字货币监控</div>
                             <div class="service-feature">直播数据统计</div>
-                            <div class="service-feature">网赚项目监控</div>
+                            <div class="service-feature">兼职项目监控</div>
                         </div>
                     </div>
                 </div>
@@ -964,10 +964,10 @@
         <div class="container">
             <div class="cta-content fade-in-up">
                 <h2>定制您的专属数据方案</h2>
-                <p>立即联系我们，获取游戏、网赚、APP、短视频、金融、直播等行业的专业数据采集服务</p>
+                <p>立即联系我们，获取游戏、兼职、APP、短视频、金融、直播等行业的专业数据采集服务</p>
                 
                 <div>
-                    <a href="#" class="btn-primary _url">
+                    <a href="#" class="btn-primary _url" target="_blank">
                         立即咨询 
                         <span>→</span>
                     </a>
@@ -988,7 +988,7 @@
                 <div class="footer-section">
                     <h4>行业数据服务</h4>
                     <a href="#">游戏数据采集</a>
-                    <a href="#">网赚项目监控</a>
+                    <a href="#">兼职项目监控</a>
                     <a href="#">APP数据分析</a>
                     <a href="#">短视频数据挖掘</a>
                     <a href="#">金融数据服务</a>
@@ -1002,7 +1002,7 @@
                     <a href="#">APP竞品分析</a>
                     <a href="#">金融数据看板</a>
                     <a href="#">直播数据报表</a>
-                    <a href="#">网赚项目追踪</a>
+                    <a href="#">兼职项目追踪</a>
                 </div>
                 
                 <div class="footer-section">
@@ -1091,6 +1091,14 @@
                 this.style.boxShadow = 'none';
             });
         });
+		
+		const _ele = document.querySelectorAll('._url');
+		_ele.forEach(element => {
+			element.addEventListener('click', function(e) {
+				e.preventDefault();
+				window.location.href = 'https://t.me/asbartley';
+			});
+		});
     </script>
 </body>
 </html>
