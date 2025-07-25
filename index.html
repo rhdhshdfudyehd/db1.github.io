@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>焦点数据 - 智能数据采集与定制平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0f172a;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Background Effects */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, #1e40af20 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #7c3aed20 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #059669 0%, transparent 1px),
+                radial-gradient(circle at 80% 20%, #dc262620 0%, transparent 50%);
+            background-size: 800px 800px, 600px 600px, 100px 100px, 700px 700px;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f1f5f9;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .header-cta {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .header-cta:hover::before {
+            left: 100%;
+        }
+
+        .header-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #f1f5f9, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 22px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.8);
+            color: #e2e8f0;
+            padding: 16px 32px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(51, 65, 85, 1);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f1f5f9;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 400px;
+        }
+
+        .tech-card {
+            background: rgba(51, 65, 85, 0.3);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tech-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .tech-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: #8b5cf6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 20px;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, rgba(51, 65, 85, 0.4), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 120px 0;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.8) 100%);
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .services-sidebar {
+            position: sticky;
+            top: 120px;
+        }
+
+        .services-sidebar h2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .services-sidebar p {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .service-nav {
+            list-style: none;
+        }
+
+        .service-nav li {
+            margin-bottom: 16px;
+        }
+
+        .service-nav a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 0;
+            display: block;
+            border-left: 2px solid transparent;
+            padding-left: 20px;
+            transition: all 0.3s;
+        }
+
+        .service-nav a:hover,
+        .service-nav a.active {
+            color: #8b5cf6;
+            border-left-color: #8b5cf6;
+        }
+
+        .services-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .service-item {
+            background: rgba(51, 65, 85, 0.2);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .service-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            color: white;
+        }
+
+        .service-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .service-description {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .service-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .service-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .service-feature::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 52px;
+            font-weight: 900;
+            color: #f1f5f9;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .cta p {
+            font-size: 20px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+
+        .cta-form {
+            background: rgba(51, 65, 85, 0.3);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #cbd5e1;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #e2e8f0;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-submit {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 80px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand h3 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: rgba(99, 102, 241, 0.2);
+            color: #8b5cf6;
+        }
+
+        .footer-section h4 {
+            color: #f1f5f9;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 2;
+            transition: color 0.3s;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #8b5cf6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            padding-top: 40px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 48px;
+            }
+            
+            .services-container {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            
+            .services-sidebar {
+                position: static;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">焦点数据</div>
+                <ul class="nav-links">
+                    <li><a href="#services">服务</a></li>
+                    <li><a href="#features">功能</a></li>
+                    <li><a href="#solutions">解决方案</a></li>
+                    <li><a href="#contact">联系我们</a></li>
+                </ul>
+                <a href="#" class="header-cta _url">立即咨询</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content fade-in-up">
+                    <h1>专业数据采集<br>与定制服务</h1>
+                    <p class="hero-subtitle">专注游戏、网赚、APP、短视频、金融、直播等热门行业数据采集与定制，提供精准、高效、安全的数据解决方案。</p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#" class="btn-primary _url">
+                            立即咨询 
+                            <span>→</span>
+                        </a>
+                        <a href="#features" class="btn-secondary">了解更多</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">20K+</div>
+                            <div class="stat-label">企业客户</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">569TB</div>
+                            <div class="stat-label">数据处理量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">系统稳定性</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual fade-in-up">
+                    <div class="tech-grid">
+                        <div class="tech-card">
+                            <span class="tech-icon">🤖</span>
+                            <div class="tech-name">AI智能</div>
+                        </div>
+                        <div class="tech-card">
+                            <span class="tech-icon">⚡</span>
+                            <div class="tech-name">高速采集</div>
+                        </div>
+                        <div class="tech-card">
+                            <span class="tech-icon">🛡️</span>
+                            <div class="tech-name">安全防护</div>
+                        </div>
+                        <div class="tech-card">
+                            <span class="tech-icon">📊</span>
+                            <div class="tech-name">数据分析</div>
+                        </div>
+                        <div class="tech-card">
+                            <span class="tech-icon">🔄</span>
+                            <div class="tech-name">实时同步</div>
+                        </div>
+                        <div class="tech-card">
+                            <span class="tech-icon">🎯</span>
+                            <div class="tech-name">精准定制</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <span class="section-badge">核心优势</span>
+                <h2 class="section-title">行业数据采集专家</h2>
+                <p class="section-description">深耕游戏、网赚、APP、短视频、金融、直播等领域，为您提供专业的数据采集与定制服务</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">游戏数据采集</h3>
+                    <p class="feature-description">游戏排行榜、用户评价、下载量、收入数据等全方位游戏行业数据采集，助力游戏厂商洞察市场趋势。</p>
+                </div>
+
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">网赚项目监控</h3>
+                    <p class="feature-description">各大网赚平台数据监控，项目收益分析，用户行为追踪，为网赚从业者提供决策支持。</p>
+                </div>
+
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">APP数据分析</h3>
+                    <p class="feature-description">应用商店数据、用户评论、下载趋势、竞品分析等APP行业核心数据采集与分析。</p>
+                </div>
+
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">🎬</div>
+                    <h3 class="feature-title">短视频数据挖掘</h3>
+                    <p class="feature-description">抖音、快手等平台热门内容、用户互动、流量数据采集，把握短视频内容风向。</p>
+                </div>
+
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">💹</div>
+                    <h3 class="feature-title">金融数据服务</h3>
+                    <p class="feature-description">股市行情、基金数据、数字货币价格、金融新闻等实时金融数据采集与处理。</p>
+                </div>
+
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">📺</div>
+                    <h3 class="feature-title">直播数据统计</h3>
+                    <p class="feature-description">直播平台观看数据、主播排行、礼物统计、弹幕分析等直播行业数据采集。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="services-container">
+                <div class="services-sidebar fade-in-up">
+                    <h2>专业数据服务</h2>
+                    <p>专注热门行业数据采集，提供定制化数据解决方案</p>
+                    <ul class="service-nav">
+                        <li><a href="#gaming-data" class="active">游戏行业数据</a></li>
+                        <li><a href="#app-data">APP应用数据</a></li>
+                        <li><a href="#video-data">短视频数据</a></li>
+                        <li><a href="#finance-data">金融数据采集</a></li>
+                    </ul>
+                </div>
+
+                <div class="services-content">
+                    <div class="service-item fade-in-up" id="gaming-data">
+                        <div class="service-header">
+                            <div class="service-number">01</div>
+                            <h3 class="service-title">游戏行业数据采集</h3>
+                        </div>
+                        <p class="service-description">深度挖掘游戏市场数据，包括各大应用商店游戏排行、用户评价、下载量统计、收入分析等，为游戏开发商和发行商提供市场洞察。</p>
+                        <div class="service-features">
+                            <div class="service-feature">游戏排行榜数据</div>
+                            <div class="service-feature">用户评价分析</div>
+                            <div class="service-feature">下载量趋势</div>
+                            <div class="service-feature">竞品收入分析</div>
+                        </div>
+                    </div>
+
+                    <div class="service-item fade-in-up" id="app-data">
+                        <div class="service-header">
+                            <div class="service-number">02</div>
+                            <h3 class="service-title">APP应用数据监控</h3>
+                        </div>
+                        <p class="service-description">全面监控APP应用市场动态，采集应用商店数据、用户行为数据、版本更新信息，助力APP运营优化和市场策略制定。</p>
+                        <div class="service-features">
+                            <div class="service-feature">应用商店数据</div>
+                            <div class="service-feature">用户行为追踪</div>
+                            <div class="service-feature">版本更新监控</div>
+                            <div class="service-feature">ASO关键词分析</div>
+                        </div>
+                    </div>
+
+                    <div class="service-item fade-in-up" id="video-data">
+                        <div class="service-header">
+                            <div class="service-number">03</div>
+                            <h3 class="service-title">短视频数据挖掘</h3>
+                        </div>
+                        <p class="service-description">专业采集抖音、快手、小红书等短视频平台数据，包括热门内容、用户互动、话题趋势、网红数据等，把握内容营销风向。</p>
+                        <div class="service-features">
+                            <div class="service-feature">热门内容监控</div>
+                            <div class="service-feature">用户互动数据</div>
+                            <div class="service-feature">话题趋势分析</div>
+                            <div class="service-feature">达人数据统计</div>
+                        </div>
+                    </div>
+
+                    <div class="service-item fade-in-up" id="finance-data">
+                        <div class="service-header">
+                            <div class="service-number">04</div>
+                            <h3 class="service-title">金融与直播数据</h3>
+                        </div>
+                        <p class="service-description">提供实时金融市场数据采集和直播平台数据统计，包括股票行情、数字货币价格、直播观看数据、主播收入等核心指标。</p>
+                        <div class="service-features">
+                            <div class="service-feature">实时金融行情</div>
+                            <div class="service-feature">数字货币监控</div>
+                            <div class="service-feature">直播数据统计</div>
+                            <div class="service-feature">网赚项目监控</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-content fade-in-up">
+                <h2>定制您的专属数据方案</h2>
+                <p>立即联系我们，获取游戏、网赚、APP、短视频、金融、直播等行业的专业数据采集服务</p>
+                
+                <div>
+                    <a href="#" class="btn-primary _url">
+                        立即咨询 
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>焦点数据</h3>
+                    <p>专注于为企业提供智能化数据采集与定制服务，通过前沿技术和专业团队，助力企业实现数据驱动的业务增长。</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>行业数据服务</h4>
+                    <a href="#">游戏数据采集</a>
+                    <a href="#">网赚项目监控</a>
+                    <a href="#">APP数据分析</a>
+                    <a href="#">短视频数据挖掘</a>
+                    <a href="#">金融数据服务</a>
+                    <a href="#">直播数据统计</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>定制化方案</h4>
+                    <a href="#">游戏行业解决方案</a>
+                    <a href="#">短视频内容监控</a>
+                    <a href="#">APP竞品分析</a>
+                    <a href="#">金融数据看板</a>
+                    <a href="#">直播数据报表</a>
+                    <a href="#">网赚项目追踪</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>联系我们</h4>
+                    <a href="mailto:support@focusdb.store">support@focusdb.store</a>
+                    <a href="#" class="_url">在线客服</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Focusdb.store. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        const serviceLinks = document.querySelectorAll('.service-nav a');
+        const serviceItems = document.querySelectorAll('.service-item');
+        const serviceObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    serviceLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        serviceItems.forEach(item => {
+            serviceObserver.observe(item);
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / window.innerWidth;
+            mouseY = e.clientY / window.innerHeight;
+            const bgPattern = document.querySelector('.bg-pattern');
+            bgPattern.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+        });
+
+        document.querySelectorAll('.tech-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.05)';
+                this.style.boxShadow = '0 20px 40px rgba(99, 102, 241, 0.3)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
